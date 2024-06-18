@@ -39,8 +39,10 @@ public class UserController {
     @PostMapping("/{userId}/matches/{matchId}")
     public ResponseEntity<RoundMatchDto> playMatch(@PathVariable Long userId, @PathVariable Long matchId, @RequestBody PlayUserMatchDto playUserMatchDto) {
         RoundMatch roundMatch = userService.playUserMatch(userId, matchId, playUserMatchDto.getNumber());
-
-        return ResponseEntity.ok(modelMapper.map(roundMatch, RoundMatchDto.class));
+        MatchDto matchDto = modelMapper.map(roundMatch.getMatchModel(), MatchDto.class);
+        RoundMatchDto roundMatchDto = modelMapper.map(roundMatch, RoundMatchDto.class);
+        roundMatchDto.setMatchDto(matchDto);
+        return ResponseEntity.ok(roundMatchDto);
     }
 
 }
